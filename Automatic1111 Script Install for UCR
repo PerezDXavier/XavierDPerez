@@ -1,18 +1,6 @@
 #!/bin/bash
 
-# Function to check if the user has admin privileges
-check_admin_privileges() {
-    if [[ $EUID -ne 0 ]]; then
-        echo "Requesting admin privileges..."
-        sudo "$0" "$@"
-        exit $?
-    fi
-}
-
-# Step 1: Check for admin privileges
-check_admin_privileges
-
-# Step 2: Install Homebrew
+# Step 1: Install Homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # Check if Homebrew is installed successfully
@@ -21,7 +9,7 @@ if [[ $? -ne 0 ]]; then
     exit 1
 fi
 
-# Step 3: Install required packages
+# Step 2: Install required packages
 brew install cmake protobuf rust python@3.10 git wget
 
 # Check if package installation is successful
@@ -30,7 +18,7 @@ if [[ $? -ne 0 ]]; then
     exit 1
 fi
 
-# Step 4: Clone the AUTOMATIC1111 repository
+# Step 3: Clone the AUTOMATIC1111 repository
 git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui
 
 # Check if the repository is cloned successfully
@@ -39,14 +27,14 @@ if [[ $? -ne 0 ]]; then
     exit 1
 fi
 
-# Step 5: Download the model and config files and place them in the specified folder
+# Step 4: Download the model files and place them in the specified folder
 cd stable-diffusion-webui/models/Stable-diffusion
 wget -O model.pt https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.ckpt
-wget -O config.yaml https://example.com/config.yaml  # Replace with the actual config.yaml URL
+wget -O config.yaml https://example.com/config.yaml  # Replace with the actual config.yaml URL if needed
 
-# Check if model and config file downloads are successful
+# Check if model download is successful
 if [[ $? -ne 0 ]]; then
-    echo "Model or config file download failed."
+    echo "Model download failed."
     exit 1
 fi
 
