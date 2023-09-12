@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Define the target directory for the repository
+target_dir="/Applications/stable-diffusion-webui"
+
+# Check if the directory already exists
+if [ -d "$target_dir" ]; then
+    echo "The directory '$target_dir' already exists."
+    # You can choose to update the existing repository here if needed
+    # For example, you can run 'git pull' to fetch the latest changes
+    exit 1
+fi
+
+# Step 1: Clone the AUTOMATIC1111 repository
+cd /Applications/
+git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui
+
+# Check if the repository is cloned successfully
+if [[ $? -ne 0 ]]; then
+    echo "Repository cloning failed."
+    exit 1
+fi
+
+# Step 4: Download the model files and place them in the specified folder
+cd "$target_dir/models/Stable-diffusion"
+wget -O model.pt https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.ckpt
+
+# Check if model download is successful
+if [[ $? -ne 0 ]]; then
+    echo "Model download failed."
+    exit 1
+fi
+
+echo "All steps completed successfully."
+exit 0
